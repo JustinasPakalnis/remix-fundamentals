@@ -1,21 +1,6 @@
-import { json } from "@remix-run/node";
 import { useLoaderData, Link } from "@remix-run/react";
-
-export const loader = async () => {
-  const data = {
-    posts: [
-      {
-        slug: "my-first-post",
-        title: "My First Post",
-      },
-      {
-        slug: "90s-mixtape",
-        title: "A Mixtape I Made Just For You",
-      },
-    ],
-  };
-  return json(data); // <-- send the data from your backend
-};
+import { loader } from "./postLoader";
+export { loader };
 export default function Posts() {
   const { posts } = useLoaderData();
   return (
