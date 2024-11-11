@@ -99,7 +99,7 @@ From there, your default export component can be something simple like this:
 
 - `app/models/post.server.ts`
 - `app/routes/posts/$slug.tsx` <-- you create this file
-
+$slug.tsx
 ## 💯 Extra Credit
 
 ### 1. Add post content
