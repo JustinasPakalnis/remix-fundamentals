@@ -1,7 +1,5 @@
 import { json } from "@remix-run/node";
 
-
-
 async function getPosts() {
     return [
       {
