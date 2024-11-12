@@ -9,7 +9,12 @@ import {
 import invariant from "tiny-invariant";
 
 // 🐨 you'll need to import `deletePost` and `updatePost` here as well.
-import { createPost, getPost } from "~/models/post.server";
+import {
+  createPost,
+  getPost,
+  deletePost,
+  updatePost,
+} from "~/models/post.server";
 
 export async function loader({ params }: LoaderArgs) {
   invariant(params.slug, "slug not found");
@@ -60,13 +65,19 @@ const inputClassName = `w-full rounded border border-gray-500 px-2 py-1 text-lg`
 export default function PostAdmin() {
   const data = useLoaderData<typeof loader>();
   const errors = useActionData<typeof action>();
+  console.log(data);
 
   const transition = useTransition();
   // 🐨 now that there can be multiple transitions on this page
   // we'll need to disambiguate between them. You can do that with
   // the "intent" in the form data.
   // 💰 transition.submission?.formData.get("intent")
-  const isCreating = Boolean(transition.submission);
+  const isCreating = Boolean(
+    transition.submission?.formData.get("intent") === "create",
+  );
+  const isDeleting = Boolean(
+    transition.submission?.formData.get("intent") === "delete",
+  );
   // 🐨 create an isUpdating and isDeleting variable based on the transition
   // 🐨 create an isNewPost variable based on whether there's a post on `data`.
 
@@ -120,20 +131,40 @@ export default function PostAdmin() {
           defaultValue={data?.post?.markdown}
         />
       </p>
+
       {/* 🐨 If we're editing an existing post, then render a delete button */}
       {/* 💰 The button's "name" prop should be "intent" and the "value" prop should be "delete" */}
       {/* 💰 Here's some good looking classes for it: className="rounded bg-red-500 py-2 px-4 text-white hover:bg-red-600 focus:bg-red-400 disabled:bg-red-300" */}
       {/* 🐨 It should say "Deleting..." when a submission with the intent "delete" is ongoing, and "Delete" otherwise. */}
       <p className="text-right">
+        {data.post ? (
+          <button
+            type="submit"
+            name="intent"
+            value="delete"
+            className="rounded bg-red-500 py-2 m-2 px-4 text-white hover:bg-red-600 focus:bg-red-400 disabled:bg-red-300"
+            disabled={isDeleting}
+          >
+            {isDeleting ? "Deleting..." : "Delete"}
+          </button>
+        ) : null}
         <button
           type="submit"
+          name="intent"
+          value="create"
           // 🐨 add a name of "intent" and a value of "create" if this is a new post or "update" if it's an existing post
-          className="rounded bg-blue-500 py-2 px-4 text-white hover:bg-blue-600 focus:bg-blue-400 disabled:bg-blue-300"
+          className="rounded bg-blue-500 py-2 m-2 px-4 text-white hover:bg-blue-600 focus:bg-blue-400 disabled:bg-blue-300"
           // 🐨 this should be disabled if we're creating *or* updating
           disabled={isCreating}
         >
           {/* 🐨 if this is a new post then this works fine as-is, but if we're updating it should say "Updating..." / "Update" */}
-          {isCreating ? "Creating..." : "Create Post"}
+          {isCreating && data.post
+            ? "Updating..."
+            : isCreating && !data.post
+            ? "Creating"
+            : data.post
+            ? "Update"
+            : "Create"}
         </button>
       </p>
     </Form>

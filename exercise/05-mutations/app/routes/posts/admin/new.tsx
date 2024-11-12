@@ -1,7 +1,6 @@
 import type { ActionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { Form, useActionData } from "@remix-run/react";
-import { log } from "console";
 import { createPost } from "~/models/post.server";
 // 🐨 implement the action function here.
 // 1. accept the request object
