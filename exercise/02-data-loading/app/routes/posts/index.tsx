@@ -1,6 +1,14 @@
 import { useLoaderData, Link } from "@remix-run/react";
-import { loader } from "./postLoader";
-export { loader };
+import { json } from "@remix-run/node";
+import { prisma } from "~/db.server";
+async function getPosts() {
+  return prisma.post.findMany();
+}
+
+export async function loader() {
+  const posts = await getPosts();
+  return json({posts});
+}
 export default function Posts() {
   const { posts } = useLoaderData();
   return (
