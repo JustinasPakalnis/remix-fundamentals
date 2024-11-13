@@ -30,5 +30,5 @@ export default function PostSlug() {
 export function ErrorBoundary({ error }: { error: Error }) {
   console.error(error);
 
-  return <ErrorFallback>There was a problem. Sorry.</ErrorFallback>;
+  return <ErrorFallback>There was a problem. Sorry mister.</ErrorFallback>;
 }

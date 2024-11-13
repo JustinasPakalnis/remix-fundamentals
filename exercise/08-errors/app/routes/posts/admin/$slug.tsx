@@ -14,6 +14,7 @@ import {
   getPost,
   updatePost,
 } from "~/models/post.server";
+import { ErrorFallback } from "~/components";
 
 export async function loader({ params }: LoaderArgs) {
   invariant(params.slug, "slug not found");
@@ -151,6 +152,10 @@ export default function PostAdmin() {
     </Form>
   );
 }
+export function ErrorBoundary({ error }: { error: Error }) {
+  console.error(error);
 
+  return <ErrorFallback>There was a problem. Sorry fella 123.</ErrorFallback>;
+}
 // 🐨 Add an ErrorBoundary component to this
 // 💰 You can use the ErrorFallback component from "~/components"
